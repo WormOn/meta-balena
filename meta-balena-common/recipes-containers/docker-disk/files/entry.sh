@@ -59,12 +59,7 @@ install_app() {
 				_tag="${_tag}.${_variant}"
 			fi
 			docker tag "${_image_id}" "${_appName}:${_tag}"
-			_appUUID=$(print_appUUID_from_appName "${_appName}" "${_api_env}")
-			if [ -z "${_appUUID}" ]; then
-				echo "Application ${_appName} not found in ${_api_env}"
-				exit 1
-			fi
-			docker create --label "${BALENA_HOSTAPP_EXTENSIONS_FEATURE}" --label "io.balena.app-uuid=${_appUUID}" "${_image_location}" none
+			docker create --label "${BALENA_HOSTAPP_EXTENSIONS_FEATURE}" "${_image_location}" none
 		fi
 		# Adjust PARTITION_SIZE
 		_image_size_bytes=$(fetch_size_from_app "${_appName}" "${_release}" "${_api_env}" "${_variant}")
