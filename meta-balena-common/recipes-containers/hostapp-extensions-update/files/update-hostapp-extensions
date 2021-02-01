@@ -12,7 +12,7 @@ readonly script_name=$(basename "${0}")
 usage() {
 	cat <<EOF
 Usage: ${script_name} [OPTIONS]
-	-t Space separated list ofappUUID:imageDigest for hostapp extension containers to install
+	-t Space separated list of image digests for hostapp extension containers
 	-r Reboot after update
 EOF
 	exit 0
@@ -69,13 +69,12 @@ APPS_JSON_PATH="${RESIN_DATA_DIR}/apps.json"
 if [ -z "${target_hostext_images}" ]; then
 	if [ -f "${APPS_JSON_PATH}" ]; then
 		info "Using preloaded containers from ${APPS_JSON_PATH}"
-		target_hostext_images=$(jq -r '.apps | to_entries | .[] | select(.value.type=="hostapp extension") | [.key, .value.services[].image] | @tsv' "${APPS_JSON_PATH}" | tr "\t" ":" | tr "\n" " ")
+		target_hostext_images=$(jq --raw-output '.apps[] | select(.type=="hostapp extension") | .services[].image' ${APPS_JSON_PATH} | tr "\n" " ")
 	fi
 fi
 if [ -n "${target_hostext_images}" ]; then
 	info "Target hostapp extensions:"
-	for pair in ${target_hostext_images}; do
-		hostext=${pair#*:}
+	for hostext in ${target_hostext_images}; do
 		info " - ${hostext}"
 	done
 fi
@@ -92,8 +91,7 @@ else
 fi
 
 # Verify targets
-for pair in ${target_hostext_images}; do
-	hostext=${pair#*:}
+for hostext in ${target_hostext_images}; do
 	imageid=$(${DOCKER} inspect -f '{{.Id}}' "${hostext}" 2> /dev/null) || imageid=""
 	if [ -n "${imageid}" ]; then
 		continue
@@ -137,10 +135,8 @@ done
 
 if [ -n "${target_hostext_images}" ]; then
 	info "Installing new hostapp extensions:"
-	for pair in ${target_hostext_images}; do
-		hostext=${pair#*:}
-		app_uuid=${pair%%:*}
-		info " - ${hostext} from ${app_uuid}"
+	for hostext in ${target_hostext_images}; do
+		info " - ${hostext}"
 		imageid=$(${DOCKER} inspect -f '{{.Id}}' "${hostext}" 2> /dev/null) || imageid=""
 		if [ -n "${imageid}" ]; then
 			info "   - already installed"
@@ -152,7 +148,7 @@ if [ -n "${target_hostext_images}" ]; then
 			error "   - failed to install"
 			break
 		else
-			if ! ${DOCKER} create --runtime="bare" --label "${BALENA_HOSTAPP_EXTENSIONS_FEATURE}" --label "io.balena.app-uuid=${app_uuid}" "${hostext}" none  > /dev/null 2>&1; then
+			if ! ${DOCKER} create --runtime="bare" --label "${BALENA_HOSTAPP_EXTENSIONS_FEATURE}" "${hostext}" none  > /dev/null 2>&1; then
 				error "   - failed to spawn"
 				break
 			fi
