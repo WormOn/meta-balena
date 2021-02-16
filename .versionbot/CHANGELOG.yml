@@ -1,4 +1,36 @@
 - commits:
+    - subject: 'dnsmasq: enable dbus support'
+      hash: 348b706d57d50d3abbd1a89bb7fbb7a3366a1ecc
+      body: |
+        This config option is disabled by default in the upstream package
+        so I'm including the change here as a separate commit.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+    - subject: 'dnsmasq: update to 2.84 with dnspooq fix'
+      hash: c902fc63fd9d75ecd3958dac2c30a78d4f8ff7c7
+      body: >
+        https://github.com/balena-os/meta-balena/issues/2099
+
+
+        Copy dnsmasq 2.84 recipe and files from this upstream patch:
+
+
+        http://cgit.openembedded.org/meta-openembedded/commit/meta-networking/recipes-support/dnsmasq?id=3e28a31bb479f292b9a052a3d2eee84c49319ee3
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.71.1
+  date: 2021-02-16T13:54:30.462Z
+- commits:
     - subject: 'meta-balena-common: add grub-efi support'
       hash: 3bfbd05d81d59c82fb131117700325416fb152cb
       body: |
