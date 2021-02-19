@@ -1,4 +1,33 @@
 - commits:
+    - subject: 'meta-balena: rename resin image types to balena'
+      hash: 08cc72c5f43b70b4958fee7df03a4e1828d68e7c
+      body: |
+        As part of a full rename away from legacy resin namespaces the
+        following components have been renamed:
+
+        - resinos-img
+        - image_types_resin (class)
+        - image-resin (class)
+        - resin-image (recipes)
+        - resin-image-flasher (recipes)
+        - resin-image-initramfs (recipes)
+
+        These changes will require compatibility updates in the following
+        projects:
+
+        - balena-yocto-scripts for packaging images
+        - device repo coffee files
+        - device repo append files for recipes changed above
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.72.0
+  date: 2021-02-19T14:09:50.855Z
+- commits:
     - subject: 'meta-balena-common: add grub-efi support'
       hash: 3bfbd05d81d59c82fb131117700325416fb152cb
       body: |
