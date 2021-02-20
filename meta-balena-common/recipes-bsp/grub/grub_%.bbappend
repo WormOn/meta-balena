@@ -7,7 +7,8 @@ DEPENDS_append_class-target = " grub-conf"
 FILES_${PN}-common_remove = "${libdir}/${BPN}"
 
 do_deploy_class-target() {
-    cp -r ${D}${libdir}/grub/ ${DEPLOYDIR}/
+    mkdir -p ${DEPLOYDIR}/grub/${GRUB_TARGET}
+    cp -r ${D}${libdir}/grub/${GRUB_TARGET}/*.mod ${DEPLOYDIR}/grub/${GRUB_TARGET}
 }
 
 do_deploy() {
